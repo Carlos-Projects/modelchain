@@ -1,0 +1,56 @@
+{
+  "model_name": "llama-3-security-v1",
+  "model_version": "1.0.0",
+  "model_type": "llm",
+  "base_model": "meta-llama/Meta-Llama-3-8B",
+  "base_model_hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "description": "Security-tuned variant of Llama 3 for prompt injection detection",
+  "author": "Carlos Rocha",
+  "framework": "transformers",
+  "framework_version": "4.36.0",
+  "license": "MIT",
+  "url": "https://huggingface.co/carlosrocha/llama-3-security-v1",
+  "datasets": [
+    {
+      "name": "security-instruct",
+      "version": "2.1.0",
+      "source": "huggingface",
+      "hash": "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3",
+      "size": 524288000,
+      "description": "Curated security instruction dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/carlosrocha/security-instruct"
+    }
+  ],
+  "adapters": [
+    {
+      "name": "security-lora",
+      "type": "LoRA",
+      "source": "local",
+      "hash": "c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
+      "base_model": "meta-llama/Meta-Llama-3-8B",
+      "parameters": {
+        "r": 16,
+        "alpha": 32,
+        "dropout": 0.1
+      }
+    }
+  ],
+  "dependencies": [
+    {"name": "transformers", "version": "4.36.0", "type": "framework", "url": "https://github.com/huggingface/transformers", "license": "Apache-2.0"},
+    {"name": "torch", "version": "2.1.0", "type": "framework", "url": "https://pytorch.org", "license": "BSD"},
+    {"name": "peft", "version": "0.10.0", "type": "library", "url": "https://github.com/huggingface/peft", "license": "Apache-2.0"},
+    {"name": "safetensors", "version": "0.4.1", "type": "library", "url": "https://github.com/huggingface/safetensors", "license": "Apache-2.0"}
+  ],
+  "hyperparameters": {
+    "learning_rate": 2e-5,
+    "batch_size": 8,
+    "epochs": 3,
+    "optimizer": "adamw",
+    "scheduler": "cosine",
+    "warmup_steps": 100,
+    "weight_decay": 0.01,
+    "precision": "bf16"
+  },
+  "tags": ["security", "llm", "fine-tuned", "prompt-injection"]
+}

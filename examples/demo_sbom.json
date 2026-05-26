@@ -1,0 +1,73 @@
+{
+  "generator": "modelchain-sbom/0.1.0",
+  "generated_at": "2026-05-26T12:00:00Z",
+  "format": "modelchain",
+  "metadata": {
+    "model_name": "llama-3-security-v1",
+    "model_version": "1.0.0",
+    "model_type": "llm"
+  },
+  "sbom": {
+    "modelchain": {
+      "format": "modelchain",
+      "version": "1.0",
+      "generator": "modelchain-sbom/0.1.0",
+      "generated_at": "2026-05-26T12:00:00Z"
+    },
+    "model": {
+      "name": "llama-3-security-v1",
+      "version": "1.0.0",
+      "type": "llm",
+      "description": "Security-tuned variant of Llama 3 for prompt injection detection",
+      "author": "Carlos Rocha",
+      "license": "MIT",
+      "framework": "transformers",
+      "framework_version": "4.36.0"
+    },
+    "base_model": {
+      "name": "meta-llama/Meta-Llama-3-8B",
+      "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+    },
+    "datasets": [
+      {
+        "name": "security-instruct",
+        "version": "2.1.0",
+        "source": "huggingface",
+        "hash": "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3",
+        "size": 524288000,
+        "description": "Curated security instruction dataset",
+        "license": "MIT"
+      }
+    ],
+    "adapters": [
+      {
+        "name": "security-lora",
+        "type": "LoRA",
+        "source": "local",
+        "hash": "c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
+        "base_model": "meta-llama/Meta-Llama-3-8B",
+        "parameters": {
+          "r": 16,
+          "alpha": 32,
+          "dropout": 0.1
+        }
+      }
+    ],
+    "dependencies": [
+      {"name": "transformers", "version": "4.36.0", "type": "framework", "url": "https://github.com/huggingface/transformers", "license": "Apache-2.0"},
+      {"name": "torch", "version": "2.1.0", "type": "framework", "url": "https://pytorch.org", "license": "BSD"},
+      {"name": "peft", "version": "0.10.0", "type": "library", "url": "https://github.com/huggingface/peft", "license": "Apache-2.0"},
+      {"name": "safetensors", "version": "0.4.1", "type": "library", "url": "https://github.com/huggingface/safetensors", "license": "Apache-2.0"}
+    ]
+  },
+  "integrity_manifest": {
+    "manifest_version": "1.0",
+    "generator": "modelchain-sbom/0.1.0",
+    "algorithm": "sha256",
+    "entries": [
+      {"path": "models/meta-llama/Meta-Llama-3-8B", "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2", "algorithm": "sha256", "component_type": "base_model", "component_name": "meta-llama/Meta-Llama-3-8B"},
+      {"path": "datasets/security-instruct", "hash": "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3", "algorithm": "sha256", "component_type": "dataset", "component_name": "security-instruct", "version": "2.1.0"},
+      {"path": "adapters/security-lora", "hash": "c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4", "algorithm": "sha256", "component_type": "adapter", "component_name": "security-lora", "adapter_type": "LoRA"}
+    ]
+  }
+}
