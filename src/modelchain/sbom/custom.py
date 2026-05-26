@@ -22,7 +22,7 @@ class CustomExporter:
         Returns:
             ModelChain native SBOM document.
         """
-        return {
+        result: dict[str, Any] = {
             "modelchain": {
                 "format": "modelchain",
                 "version": "1.0",
@@ -42,12 +42,6 @@ class CustomExporter:
                 "created_at": metadata.created_at,
                 "tags": metadata.tags,
             },
-            "base_model": {
-                "name": metadata.base_model,
-                "hash": metadata.base_model_hash,
-            }
-            if metadata.base_model
-            else None,
             "hyperparameters": {
                 "learning_rate": metadata.hyperparameters.learning_rate,
                 "batch_size": metadata.hyperparameters.batch_size,
@@ -94,3 +88,9 @@ class CustomExporter:
                 for dep in metadata.dependencies
             ],
         }
+        if metadata.base_model:
+            result["base_model"] = {
+                "name": metadata.base_model,
+                "hash": metadata.base_model_hash,
+            }
+        return result

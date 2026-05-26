@@ -37,9 +37,19 @@ class ProvenanceTracker:
     edges: list[ProvenanceEdge] = field(default_factory=list)
 
     def add_node(self, node: ProvenanceNode) -> None:
+        """Add a provenance node to the graph.
+
+        Args:
+            node: The provenance node to add.
+        """
         self.nodes[node.id] = node
 
     def add_edge(self, edge: ProvenanceEdge) -> None:
+        """Add a provenance edge to the graph.
+
+        Args:
+            edge: The provenance edge to add.
+        """
         self.edges.append(edge)
 
     def build_graph(self, metadata: ModelMetadata) -> dict[str, Any]:

@@ -164,7 +164,7 @@ class TestCLIVerify:
     def test_verify_missing_manifest(self):
         result = runner.invoke(app, ["verify", "/nonexistent/manifest.json"])
         assert result.exit_code != 0
-        assert "Manifest file not found" in result.stdout
+        assert "File not found" in result.stdout
 
     def test_verify_with_manifest(self, sbom_json):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -178,7 +178,7 @@ class TestCLIAudit:
     def test_audit_missing_sbom(self):
         result = runner.invoke(app, ["audit", "/nonexistent/sbom.json"])
         assert result.exit_code != 0
-        assert "SBOM file not found" in result.stdout
+        assert "File not found" in result.stdout
 
     def test_audit_with_sbom(self, sbom_json):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -192,7 +192,7 @@ class TestCLIReport:
     def test_report_missing_sbom(self):
         result = runner.invoke(app, ["report", "/nonexistent/sbom.json"])
         assert result.exit_code != 0
-        assert "SBOM file not found" in result.stdout
+        assert "File not found" in result.stdout
 
     def test_report_console(self, sbom_json):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -244,7 +244,7 @@ class TestCLISbom:
     def test_sbom_missing_file(self):
         result = runner.invoke(app, ["sbom", "/nonexistent/sbom.json"])
         assert result.exit_code != 0
-        assert "SBOM file not found" in result.stdout
+        assert "File not found" in result.stdout
 
     def test_sbom_display(self, sbom_json):
         with tempfile.TemporaryDirectory() as tmpdir:

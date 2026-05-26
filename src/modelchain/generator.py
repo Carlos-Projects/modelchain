@@ -32,6 +32,20 @@ def generate_sbom(
     metadata: ModelMetadata,
     output_format: str = "modelchain",
 ) -> SBOMResult:
+    """Generate a complete SBOM for an AI model.
+
+    This is the main entry point for creating an SBOM. It builds the SBOM
+    document, tracks provenance, generates integrity manifests, analyzes
+    dependencies, correlates vulnerabilities, and checks compliance across
+    all supported frameworks.
+
+    Args:
+        metadata: Model metadata containing all components.
+        output_format: Output format ("modelchain", "cyclonedx", "spdx").
+
+    Returns:
+        Complete SBOMResult with SBOM, manifest, provenance, and compliance.
+    """
     builder = SBOMBuilder()
     sbom = builder.build(metadata, output_format)
 

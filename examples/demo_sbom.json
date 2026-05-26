@@ -69,5 +69,42 @@
       {"path": "datasets/security-instruct", "hash": "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3", "algorithm": "sha256", "component_type": "dataset", "component_name": "security-instruct", "version": "2.1.0"},
       {"path": "adapters/security-lora", "hash": "c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4", "algorithm": "sha256", "component_type": "adapter", "component_name": "security-lora", "adapter_type": "LoRA"}
     ]
-  }
+  },
+  "audit_summary": {
+    "total_components": 6,
+    "datasets": 1,
+    "adapters": 1,
+    "dependencies": 4,
+    "integrity_verified": true,
+    "vulnerabilities_found": 0
+  },
+  "compliance_reports": [
+    {
+      "framework": "EU AI Act",
+      "reference": "https://artificialintelligenceact.eu/",
+      "passed": true,
+      "risk_category": "general_purpose",
+      "requirements": {
+        "transparency": {"passed": true},
+        "documentation": {"passed": true},
+        "human_oversight": {"passed": true},
+        "accuracy": {"passed": true},
+        "robustness": {"passed": true},
+        "cybersecurity": {"passed": true},
+        "data_governance": {"passed": true},
+        "risk_management": {"passed": true}
+      }
+    },
+    {
+      "framework": "NIST AI RMF 1.0",
+      "reference": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "passed": true,
+      "categories": {
+        "govern": {"passed": true},
+        "map": {"passed": true},
+        "measure": {"passed": true},
+        "manage": {"passed": true}
+      }
+    }
+  ]
 }

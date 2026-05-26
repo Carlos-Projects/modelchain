@@ -114,7 +114,15 @@ class DependencyAnalyzer:
                         }
                     )
             except InvalidVersion:
-                pass
+                outdated.append(
+                    {
+                        "name": dep.name,
+                        "current": dep.version,
+                        "latest": "unknown",
+                        "type": dep.type,
+                        "error": "invalid version string",
+                    }
+                )
 
     def _generate_recommendations(self, outdated: list[dict[str, Any]]) -> list[str]:
         """Generate recommendations based on analysis."""

@@ -65,6 +65,13 @@ def generate(
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
 ) -> None:
     """Generate an SBOM for an AI model."""
+    if not name or not version:
+        rprint("[red]Error:[/] model name and version are required")
+        raise typer.Exit(1)
+
+    if fmt not in ("modelchain", "cyclonedx", "spdx"):
+        rprint(f"[red]Error:[/] unsupported format '{fmt}'. Choose: modelchain, cyclonedx, spdx")
+        raise typer.Exit(1)
     hyperparameters = HyperParameters()
 
     datasets = _parse_datasets(dataset)
@@ -110,18 +117,26 @@ def generate(
         )
 
 
+def _read_json(path: str | Path) -> dict[str, Any]:
+    """Read and parse a JSON file, exiting with a clean error on failure."""
+    path_obj = Path(path)
+    if not path_obj.exists():
+        rprint(f"[red]Error:[/] File not found: {path}")
+        raise typer.Exit(1)
+    try:
+        return json.loads(path_obj.read_text())
+    except json.JSONDecodeError as e:
+        rprint(f"[red]Error:[/] Invalid JSON in {path}: {e}")
+        raise typer.Exit(1)
+
+
 @app.command()
 def verify(
     manifest: str = typer.Argument(..., help="Path to integrity manifest JSON file"),
     base_path: str = typer.Option(".", "--base-path", "-b", help="Base path for resolving files"),
 ) -> None:
     """Verify integrity of model components against a manifest."""
-    manifest_path = Path(manifest)
-    if not manifest_path.exists():
-        rprint(f"[red]Error:[/] Manifest file not found: {manifest}")
-        raise typer.Exit(1)
-
-    data = json.loads(manifest_path.read_text())
+    data = _read_json(manifest)
 
     verifier = ProvenanceVerifier()
     result = verifier.verify_manifest(
@@ -157,12 +172,7 @@ def audit(
     manifest: str = typer.Argument(..., help="Path to model SBOM JSON file"),
 ) -> None:
     """Audit the model supply chain for vulnerabilities."""
-    manifest_path = Path(manifest)
-    if not manifest_path.exists():
-        rprint(f"[red]Error:[/] SBOM file not found: {manifest}")
-        raise typer.Exit(1)
-
-    data = json.loads(manifest_path.read_text())
+    data = _read_json(manifest)
 
     meta = data.get("metadata", {})
     metadata = ModelMetadata(
@@ -226,12 +236,7 @@ def report(
     output: str = typer.Option("", "--output", "-o", help="Output file path (for json/html)"),
 ) -> None:
     """Generate compliance reports from an SBOM."""
-    sbom_path = Path(sbom)
-    if not sbom_path.exists():
-        rprint(f"[red]Error:[/] SBOM file not found: {sbom}")
-        raise typer.Exit(1)
-
-    data = json.loads(sbom_path.read_text())
+    data = _read_json(sbom)
 
     meta = data.get("metadata", {})
     metadata = ModelMetadata(
@@ -243,7 +248,14 @@ def report(
     reporter = ComplianceReporter()
     report_data = reporter.generate_report(metadata)
 
-    if format == "console" or not output:
+    valid_formats = {"console", "json", "html"}
+    if format not in valid_formats:
+        rprint(
+            f"[red]Error:[/] unsupported format '{format}'. Choose: {', '.join(sorted(valid_formats))}"
+        )
+        raise typer.Exit(1)
+
+    if format == "console":
         console = ConsoleReporter()
         console.report_compliance(
             {
@@ -253,8 +265,13 @@ def report(
                 },
             }
         )
+        if not output:
+            return
 
-    if format == "json" and output:
+    if format == "json":
+        if not output:
+            rprint("[red]Error:[/] --output is required for json format")
+            raise typer.Exit(1)
         out_path = Path(output)
         out_path.write_text(
             json.dumps(
@@ -268,8 +285,12 @@ def report(
             )
         )
         rprint(f"[green]Report written:[/] {out_path}")
+        return
 
-    if format == "html" and output:
+    if format == "html":
+        if not output:
+            rprint("[red]Error:[/] --output is required for html format")
+            raise typer.Exit(1)
         out_path = Path(output)
         html_reporter = HTMLReporter()
         fake_audit_summary: dict[str, Any] = {
@@ -311,12 +332,7 @@ def sbom(
     path: str = typer.Argument(..., help="Path to SBOM JSON file"),
 ) -> None:
     """Display an SBOM in the console."""
-    sbom_path = Path(path)
-    if not sbom_path.exists():
-        rprint(f"[red]Error:[/] SBOM file not found: {path}")
-        raise typer.Exit(1)
-
-    data = json.loads(sbom_path.read_text())
+    data = _read_json(path)
 
     meta = data.get("metadata", {})
     metadata = ModelMetadata(
@@ -492,3 +508,7 @@ def _parse_dependencies(deps: list[str]) -> list[FrameworkDependency]:
 def main() -> None:
     """Entry point for the CLI."""
     app()
+
+
+if __name__ == "__main__":
+    main()

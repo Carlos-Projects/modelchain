@@ -34,7 +34,7 @@ class TestCustomExporter:
         exporter = CustomExporter()
         meta = ModelMetadata(model_name="test", model_version="1", model_type="llm")
         result = exporter.export(meta)
-        assert result["base_model"] is None
+        assert "base_model" not in result
 
     def test_export_with_dataset(self):
         exporter = CustomExporter()

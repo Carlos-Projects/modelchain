@@ -4,13 +4,13 @@
 import json
 from pathlib import Path
 
-from modelchain.generator import (
+from modelchain.generator import generate_sbom
+from modelchain.models import (
     AdapterComponent,
     DatasetComponent,
     FrameworkDependency,
     HyperParameters,
     ModelMetadata,
-    generate_sbom,
 )
 
 
