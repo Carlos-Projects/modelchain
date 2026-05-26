@@ -25,7 +25,7 @@ class OSVClient:
     BASE_URL = "https://api.osv.dev/v1"
 
     def __init__(self, timeout: float = 30.0):
-        self._client = httpx.Client(base_url=self.BASE_URL, timeout=timeout)
+        self._client = httpx.Client(base_url=self.BASE_URL, timeout=min(timeout, 60.0))
 
     def query_package(self, name: str, version: str) -> list[VulnerabilityEntry]:
         payload = {"package": {"name": name, "ecosystem": "PyPI"}, "version": version}
@@ -33,14 +33,14 @@ class OSVClient:
             resp = self._client.post("/query", json=payload)
             resp.raise_for_status()
             data = resp.json()
-        except (httpx.HTTPError, httpx.TimeoutException) as e:
+        except (httpx.HTTPError, httpx.TimeoutException):
             return [
                 VulnerabilityEntry(
                     id=f"OSV-ERROR-{name}",
                     package_name=name,
                     affected_versions=version,
                     severity="LOW",
-                    description=f"OSV query failed: {e}",
+                    description="OSV query failed: unable to reach vulnerability database",
                 )
             ]
         return self._parse_response(data, name, version)
