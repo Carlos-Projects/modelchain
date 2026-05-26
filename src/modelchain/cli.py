@@ -105,7 +105,7 @@ def generate(
     console.report_sbom(result)
 
     if output:
-        output_path = Path(output)
+        output_path = Path(output).resolve()
         json_reporter = JSONReporter()
         json_reporter.report_sbom(result, output_path.with_suffix(".json"))
 
@@ -119,14 +119,14 @@ def generate(
 
 def _read_json(path: str | Path) -> dict[str, Any]:
     """Read and parse a JSON file, exiting with a clean error on failure."""
-    path_obj = Path(path)
-    if not path_obj.exists():
-        rprint(f"[red]Error:[/] File not found: {path}")
-        raise typer.Exit(1)
     try:
-        return json.loads(path_obj.read_text())
+        resolved = Path(path).resolve()
+        return json.loads(resolved.read_text())
+    except FileNotFoundError:
+        rprint(f"[red]Error:[/] File not found: {Path(path).name}")
+        raise typer.Exit(1)
     except json.JSONDecodeError as e:
-        rprint(f"[red]Error:[/] Invalid JSON in {path}: {e}")
+        rprint(f"[red]Error:[/] Invalid JSON in '{Path(path).name}': {e}")
         raise typer.Exit(1)
 
 
@@ -137,11 +137,12 @@ def verify(
 ) -> None:
     """Verify integrity of model components against a manifest."""
     data = _read_json(manifest)
+    base = Path(base_path).resolve()
 
     verifier = ProvenanceVerifier()
     result = verifier.verify_manifest(
         {e["path"]: e["hash"] for e in data.get("entries", [])},
-        base_path=base_path,
+        base_path=base,
     )
 
     console = ConsoleReporter()

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from jinja2 import Template
+from jinja2 import Environment, select_autoescape
 
 from modelchain.generator import SBOMResult
 
@@ -146,10 +146,14 @@ _SBOM_TEMPLATE = """<!DOCTYPE html>
 
 
 class HTMLReporter:
-    """Reports SBOM results as HTML files using Jinja2 templates."""
+    """Reports SBOM results as HTML files using Jinja2 templates.
+
+    Uses Jinja2 autoescaping to prevent XSS in generated HTML reports.
+    """
 
     def __init__(self):
-        self._template = Template(_SBOM_TEMPLATE)
+        self._env = Environment(autoescape=select_autoescape(["html", "xml"]))
+        self._template = self._env.from_string(_SBOM_TEMPLATE)
 
     def report_sbom(self, result: SBOMResult, path: str | Path) -> Path:
         """Write SBOM result as HTML.
@@ -171,7 +175,7 @@ class HTMLReporter:
             fmt=result.format,
             generated_at=result.generated_at,
         )
-        p = Path(path)
+        p = Path(path).resolve()
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(html)
         return p

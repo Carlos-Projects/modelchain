@@ -114,7 +114,7 @@ class IntegrityManifest:
         """
         entries: list[dict[str, Any]] = []
         for name, path in paths.items():
-            p = Path(path)
+            p = Path(path).resolve()
             if p.exists():
                 file_hash = hash_file(p, self.algorithm)
                 entries.append(

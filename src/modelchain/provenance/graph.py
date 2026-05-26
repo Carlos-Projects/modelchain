@@ -91,14 +91,23 @@ class ProvenanceGraph:
         return ancestors
 
     def to_dot(self) -> str:
-        """Export the graph as Graphviz DOT format."""
+        """Export the graph as Graphviz DOT format.
+
+        Node names and IDs are escaped to prevent DOT injection.
+        """
         lines = ["digraph ProvenanceGraph {", "  rankdir=LR;", "  node [shape=box];"]
+
+        def _dot_escape(s: str) -> str:
+            return s.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+
         for node in self.graph_data.get("nodes", []):
-            label = f"{node['name']}\\n({node['type']})"
-            lines.append(f'  "{node["id"]}" [label="{label}"];')
+            label = f"{_dot_escape(node['name'])}\\n({_dot_escape(node['type'])})"
+            lines.append(f'  "{_dot_escape(node["id"])}" [label="{label}"];')
         for edge in self.graph_data.get("edges", []):
             lines.append(
-                f'  "{edge["source"]}" -> "{edge["target"]}" [label="{edge["relationship"]}"];'
+                f'  "{_dot_escape(edge["source"])}" -> '
+                f'"{_dot_escape(edge["target"])}" '
+                f'[label="{_dot_escape(edge["relationship"])}"];'
             )
         lines.append("}")
         return "\n".join(lines)

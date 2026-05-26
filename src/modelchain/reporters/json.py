@@ -67,7 +67,7 @@ class JSONReporter:
 
     def _write_json(self, data: dict[str, Any], path: str | Path) -> Path:
         """Write dict as formatted JSON to file."""
-        p = Path(path)
+        p = Path(path).resolve()
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(json.dumps(data, indent=2))
         return p

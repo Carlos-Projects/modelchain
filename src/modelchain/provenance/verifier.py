@@ -1,23 +1,31 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 from modelchain.utils.crypto import hash_file, verify_hash
 
 
-@dataclass
 class VerificationResult:
     """Result of a provenance verification check."""
 
-    component_id: str
-    component_name: str
-    verified: bool
-    expected_hash: str
-    computed_hash: str
-    algorithm: str = "sha256"
-    errors: list[str] = field(default_factory=list)
+    def __init__(
+        self,
+        component_id: str,
+        component_name: str,
+        verified: bool,
+        expected_hash: str,
+        computed_hash: str,
+        algorithm: str = "sha256",
+        errors: list[str] | None = None,
+    ) -> None:
+        self.component_id = component_id
+        self.component_name = component_name
+        self.verified = verified
+        self.expected_hash = expected_hash
+        self.computed_hash = computed_hash
+        self.algorithm = algorithm
+        self.errors = errors or []
 
 
 class ProvenanceVerifier:
@@ -45,9 +53,10 @@ class ProvenanceVerifier:
             VerificationResult with the outcome.
         """
         errors: list[str] = []
-        p = Path(file_path)
-        if not p.exists():
-            errors.append(f"File not found: {p}")
+        p = Path(file_path).resolve()
+        try:
+            computed = hash_file(p, self.algorithm)
+        except FileNotFoundError:
             return VerificationResult(
                 component_id=component_id,
                 component_name=component_name,
@@ -55,12 +64,8 @@ class ProvenanceVerifier:
                 expected_hash=expected_hash,
                 computed_hash="",
                 algorithm=self.algorithm,
-                errors=errors,
+                errors=[f"File not found: {p.name}"],
             )
-
-        try:
-            computed = hash_file(p, self.algorithm)
-            is_verified = verify_hash(p, expected_hash, self.algorithm)
         except (OSError, ValueError) as e:
             errors.append(str(e))
             return VerificationResult(
@@ -72,6 +77,8 @@ class ProvenanceVerifier:
                 algorithm=self.algorithm,
                 errors=errors,
             )
+
+        is_verified = verify_hash(p, expected_hash, self.algorithm)
 
         return VerificationResult(
             component_id=component_id,
@@ -96,10 +103,25 @@ class ProvenanceVerifier:
         Returns:
             List of VerificationResult for each manifest entry.
         """
-        bp = Path(base_path)
+        bp = Path(base_path).resolve()
         results: list[VerificationResult] = []
         for filename, expected_hash in manifest.items():
-            file_path = bp / filename
+            # Reject path traversal in manifest filenames
+            clean_name = Path(filename).name
+            if clean_name != filename:
+                results.append(
+                    VerificationResult(
+                        component_id=filename,
+                        component_name=filename,
+                        verified=False,
+                        expected_hash=expected_hash,
+                        computed_hash="",
+                        algorithm=self.algorithm,
+                        errors=[f"Path traversal detected in manifest entry: {filename}"],
+                    )
+                )
+                continue
+            file_path = bp / clean_name
             result = self.verify_component(
                 component_id=filename,
                 component_name=filename,
@@ -124,14 +146,17 @@ class ProvenanceVerifier:
             Dict with verification summary.
         """
         results: list[VerificationResult] = []
-        bp = Path(base_path)
+        bp = Path(base_path).resolve()
 
         for node in provenance_data.get("nodes", []):
             if node.get("hash"):
-                path = bp / f"{node['name']}.bin"
+                node_name = str(node.get("name", ""))
+                # Sanitize node name for use as filename
+                safe_name = Path(node_name).name
+                path = bp / f"{safe_name}.bin"
                 result = self.verify_component(
                     component_id=node["id"],
-                    component_name=node["name"],
+                    component_name=node_name,
                     file_path=path,
                     expected_hash=node["hash"],
                 )
