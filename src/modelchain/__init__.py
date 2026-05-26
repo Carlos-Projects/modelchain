@@ -10,6 +10,7 @@ from modelchain.models import (
     FrameworkDependency,
     HyperParameters,
     ModelMetadata,
+    VulnerabilityEntry,
 )
 
 __all__ = [
@@ -22,5 +23,6 @@ __all__ = [
     "ModelChainTaxonomyAdapter",
     "ModelMetadata",
     "SBOMResult",
+    "VulnerabilityEntry",
     "generate_sbom",
 ]

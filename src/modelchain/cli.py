@@ -20,6 +20,7 @@ from modelchain.provenance.verifier import ProvenanceVerifier
 from modelchain.reporters.console import ConsoleReporter
 from modelchain.reporters.html import HTMLReporter
 from modelchain.reporters.json import JSONReporter
+from modelchain.sbom.validator import SBOMValidator
 from modelchain.supply_chain.auditor import SupplyChainAuditor
 
 app = typer.Typer(
@@ -108,14 +109,11 @@ def generate(
         output_path = Path(output).resolve()
         json_reporter = JSONReporter()
         json_reporter.report_sbom(result, output_path.with_suffix(".json"))
-
         html_reporter = HTMLReporter()
         html_reporter.report_sbom(result, output_path.with_suffix(".html"))
-
         rprint(
             f"\n[green]Reports written:[/] {output_path.with_suffix('.json')}, {output_path.with_suffix('.html')}"
         )
-
 
 def _read_json(path: str | Path) -> dict[str, Any]:
     """Read and parse a JSON file, exiting with a clean error on failure."""
@@ -134,6 +132,7 @@ def _read_json(path: str | Path) -> dict[str, Any]:
 def verify(
     manifest: str = typer.Argument(..., help="Path to integrity manifest JSON file"),
     base_path: str = typer.Option(".", "--base-path", "-b", help="Base path for resolving files"),
+    fail_on_error: bool = typer.Option(True, "--fail-on-error/--no-fail-on-error", help="Exit with error if any component fails verification"),
 ) -> None:
     """Verify integrity of model components against a manifest."""
     data = _read_json(manifest)
@@ -164,7 +163,7 @@ def verify(
     console.report_verify(verify_data)
 
     all_verified = all(r.verified for r in result)
-    if not all_verified:
+    if not all_verified and fail_on_error:
         raise typer.Exit(1)
 
 
@@ -331,6 +330,7 @@ def report(
 @app.command()
 def sbom(
     path: str = typer.Argument(..., help="Path to SBOM JSON file"),
+    validate: bool = typer.Option(False, "--validate", help="Validate SBOM structure against format spec"),
 ) -> None:
     """Display an SBOM in the console."""
     data = _read_json(path)
@@ -384,6 +384,18 @@ def sbom(
 
     console = ConsoleReporter()
     console.report_sbom(result)
+
+    if validate:
+        validator = SBOMValidator()
+        fmt = data.get("format", "modelchain")
+        errors = validator.validate(result.sbom, fmt)
+        if errors:
+            rprint(f"\n[red]Validation Errors ({len(errors)}):[/]")
+            for err in errors:
+                rprint(f"  [red]✗[/] {err}")
+            raise typer.Exit(1)
+        else:
+            rprint(f"\n[green]✓ SBOM is valid ({fmt})[/]")
 
 
 def _parse_datasets(datasets: list[str]) -> list[DatasetComponent]:

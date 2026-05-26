@@ -253,3 +253,64 @@ class TestCLISbom:
             result = runner.invoke(app, ["sbom", str(sbom_path)])
             assert result.exit_code == 0
             assert "test-cli" in result.stdout
+
+class TestCLIVerifyFailOnError:
+    def test_verify_fail_on_error_true(self):
+        """--fail-on-error (default) should exit 1 on failure."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            manifest = {"entries": [
+                {"path": "nonexistent.bin", "hash": "0000", "component_name": "test"},
+            ]}
+            manifest_path = Path(tmpdir) / "manifest.json"
+            manifest_path.write_text(json.dumps(manifest))
+            result = runner.invoke(app, [
+                "verify", str(manifest_path),
+                "--base-path", tmpdir,
+            ])
+            assert result.exit_code != 0
+
+    def test_verify_no_fail_on_error(self):
+        """--no-fail-on-error should exit 0 even with failures."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            manifest = {"entries": [
+                {"path": "nonexistent.bin", "hash": "0000", "component_name": "test"},
+            ]}
+            manifest_path = Path(tmpdir) / "manifest.json"
+            manifest_path.write_text(json.dumps(manifest))
+            result = runner.invoke(app, [
+                "verify", str(manifest_path),
+                "--base-path", tmpdir,
+                "--no-fail-on-error",
+            ])
+            assert result.exit_code == 0
+
+
+class TestCLISbomValidate:
+    def test_sbom_validate_valid_cyclonedx(self):
+        """Validate a valid CycloneDX SBOM."""
+        cyclonedx_sbom = {
+            "format": "cyclonedx",
+            "sbom": {
+                "bomFormat": "CycloneDX",
+                "specVersion": "1.6",
+                "serialNumber": "urn:uuid:1234",
+                "components": [{"name": "test", "type": "application"}],
+            },
+            "metadata": {"model_name": "test", "model_version": "1", "model_type": "llm"},
+        }
+        with tempfile.TemporaryDirectory() as tmpdir:
+            sbom_path = Path(tmpdir) / "sbom.json"
+            sbom_path.write_text(json.dumps(cyclonedx_sbom))
+            result = runner.invoke(app, ["sbom", str(sbom_path), "--validate"])
+            assert result.exit_code == 0
+            assert "SBOM is valid" in result.stdout
+
+    def test_sbom_validate_invalid(self):
+        """Validate should fail on invalid structure."""
+        invalid_sbom = {"format": "modelchain", "sbom": {}}
+        with tempfile.TemporaryDirectory() as tmpdir:
+            sbom_path = Path(tmpdir) / "sbom.json"
+            sbom_path.write_text(json.dumps(invalid_sbom))
+            result = runner.invoke(app, ["sbom", str(sbom_path), "--validate"])
+            assert result.exit_code != 0
+            assert "Validation Errors" in result.stdout

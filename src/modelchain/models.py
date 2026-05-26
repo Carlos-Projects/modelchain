@@ -80,10 +80,26 @@ class ModelMetadata:
     created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
+
+
+@dataclass
+class VulnerabilityEntry:
+    """A known vulnerability entry."""
+
+    id: str
+    package_name: str
+    affected_versions: str
+    severity: str
+    description: str
+    cvss_score: float | None = None
+    fix_version: str | None = None
+    references: list[str] = field(default_factory=list)
+
 __all__ = [
     "AdapterComponent",
     "DatasetComponent",
     "FrameworkDependency",
     "HyperParameters",
     "ModelMetadata",
+    "VulnerabilityEntry",
 ]
