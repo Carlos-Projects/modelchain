@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling>=1.21"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "modelchain-sbom"
@@ -60,8 +60,9 @@ dev = [
 ]
 taxonomy = ["mcp-taxonomy>=0.1"]
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/modelchain"]
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["modelchain*"]
 
 [tool.mypy]
 python_version = "3.11"

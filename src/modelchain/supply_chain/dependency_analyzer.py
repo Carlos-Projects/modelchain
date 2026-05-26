@@ -24,7 +24,7 @@ class DependencyReport:
 class DependencyAnalyzer:
     """Analyzes model dependencies for security and compatibility."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._known_outdated: dict[str, str] = {
             "transformers": "4.36.0",
             "torch": "2.1.0",

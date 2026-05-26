@@ -67,3 +67,11 @@ def generate_checksum_manifest(
         p = Path(path)
         manifest[p.name] = hash_file(p, algorithm)
     return manifest
+
+
+__all__ = [
+    "generate_checksum_manifest",
+    "hash_bytes",
+    "hash_file",
+    "verify_hash",
+]

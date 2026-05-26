@@ -78,3 +78,12 @@ class ModelMetadata:
     hyperparameters: HyperParameters = field(default_factory=HyperParameters)
     tags: list[str] = field(default_factory=list)
     created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+__all__ = [
+    "AdapterComponent",
+    "DatasetComponent",
+    "FrameworkDependency",
+    "HyperParameters",
+    "ModelMetadata",
+]

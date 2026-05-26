@@ -1,4 +1,9 @@
 from modelchain.generator import SBOMResult, generate_sbom
+from modelchain.integrations import (
+    MCPGuardPolicyGenerator,
+    MCPscopReportExporter,
+    ModelChainTaxonomyAdapter,
+)
 from modelchain.models import (
     AdapterComponent,
     DatasetComponent,
@@ -12,6 +17,9 @@ __all__ = [
     "DatasetComponent",
     "FrameworkDependency",
     "HyperParameters",
+    "MCPGuardPolicyGenerator",
+    "MCPscopReportExporter",
+    "ModelChainTaxonomyAdapter",
     "ModelMetadata",
     "SBOMResult",
     "generate_sbom",
