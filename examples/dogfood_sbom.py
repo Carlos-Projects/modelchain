@@ -7,12 +7,8 @@ Demonstrates ModelChain by generating an SBOM of its own dependencies.
 import json
 from pathlib import Path
 
-from modelchain.generator import (
-    FrameworkDependency,
-    HyperParameters,
-    ModelMetadata,
-    generate_sbom,
-)
+from modelchain.generator import generate_sbom
+from modelchain.models import FrameworkDependency, HyperParameters, ModelMetadata
 
 
 def main() -> None:
