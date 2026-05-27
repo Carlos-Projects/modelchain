@@ -38,7 +38,7 @@ modelchain generate my-model 1.0.0 \
   --type llm \
   --base meta-llama/Meta-Llama-3-8B \
   --framework transformers --framework-version 4.36.0 \
-  --author "Carlos Rocha" \
+  --author "Carlos-Projects" \
   --description "My fine-tuned model"
 ```
 

@@ -9,7 +9,7 @@ description = "Software Bill of Materials (SBOM) generator for AI models with pr
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
-authors = [{name = "Carlos Rocha", email = "carlosrocha@users.noreply.github.com"}]
+authors = [{name = "Carlos-Projects", email = "Carlos@AIAgentObservatory.org"}]
 keywords = [
     "sbom", "ai-security", "llm-security", "supply-chain",
     "provenance", "model-integrity", "cyclonedx", "spdx",

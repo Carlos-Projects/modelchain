@@ -17,7 +17,7 @@ def main() -> None:
         model_version="0.1.0",
         model_type="llm",
         description="Software Bill of Materials (SBOM) generator for AI models",
-        author="Carlos Rocha",
+        author="Carlos-Projects",
         framework="python",
         framework_version="3.11+",
         license="MIT",

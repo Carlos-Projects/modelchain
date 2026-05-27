@@ -5,11 +5,11 @@
   "base_model": "meta-llama/Meta-Llama-3-8B",
   "base_model_hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
   "description": "Security-tuned variant of Llama 3 for prompt injection detection",
-  "author": "Carlos Rocha",
+  "author": "Carlos-Projects",
   "framework": "transformers",
   "framework_version": "4.36.0",
   "license": "MIT",
-  "url": "https://huggingface.co/carlosrocha/llama-3-security-v1",
+  "url": "https://huggingface.co/Carlos-Projects/llama-3-security-v1",
   "datasets": [
     {
       "name": "security-instruct",
@@ -19,7 +19,7 @@
       "size": 524288000,
       "description": "Curated security instruction dataset",
       "license": "MIT",
-      "url": "https://huggingface.co/datasets/carlosrocha/security-instruct"
+      "url": "https://huggingface.co/datasets/Carlos-Projects/security-instruct"
     }
   ],
   "adapters": [

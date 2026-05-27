@@ -19,7 +19,7 @@
       "version": "1.0.0",
       "type": "llm",
       "description": "Security-tuned variant of Llama 3 for prompt injection detection",
-      "author": "Carlos Rocha",
+      "author": "Carlos-Projects",
       "license": "MIT",
       "framework": "transformers",
       "framework_version": "4.36.0"

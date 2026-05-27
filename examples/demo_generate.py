@@ -22,7 +22,7 @@ def main() -> None:
         base_model="meta-llama/Meta-Llama-3-8B",
         base_model_hash="a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
         description="Demo model for ModelChain SBOM generation",
-        author="Carlos Rocha",
+        author="Carlos-Projects",
         framework="transformers",
         framework_version="4.36.0",
         license="MIT",

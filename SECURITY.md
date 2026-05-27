@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-Please report security vulnerabilities to the GitHub repository's Security tab or email carlosrocha@users.noreply.github.com.
+Please report security vulnerabilities to the GitHub repository's Security tab or email Carlos@AIAgentObservatory.org.
 
 We will acknowledge receipt within 48 hours and provide a timeline for a fix.
 
