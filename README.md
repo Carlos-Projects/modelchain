@@ -1,10 +1,9 @@
 # ModelChain
 
-[![PyPI version](https://img.shields.io/pypi/v/modelchain-sbom.svg)](https://pypi.org/project/modelchain-sbom/)
+[![GitHub Release](https://img.shields.io/github/v/release/Carlos-Projects/modelchain)](https://github.com/Carlos-Projects/modelchain/releases)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/Carlos-Projects/modelchain/actions/workflows/ci.yml/badge.svg)](https://github.com/Carlos-Projects/modelchain/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/Carlos-Projects/modelchain/branch/main/graph/badge.svg)](https://codecov.io/gh/Carlos-Projects/modelchain)
 
 **Software Bill of Materials (SBOM) generator for AI models** with provenance tracking, cryptographic integrity verification, and compliance reporting.
 
@@ -23,16 +22,12 @@ ModelChain creates a complete provenance record of the AI model supply chain: `b
 ## Installation
 
 ```bash
-pip install modelchain-sbom
-```
-
-For development:
-
-```bash
 git clone https://github.com/Carlos-Projects/modelchain.git
 cd modelchain
 pip install -e ".[dev]"
 ```
+
+> **Note:** Package not yet published on PyPI. Install from source. Coming soon.
 
 ## Quick Start
 
