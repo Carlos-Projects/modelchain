@@ -129,6 +129,14 @@ src/modelchain/
 └── utils/              # Cryptographic utilities
 ```
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
+
+## Security
+
+Found a vulnerability? See [SECURITY.md](SECURITY.md).
+
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
