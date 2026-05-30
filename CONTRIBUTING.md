@@ -1,6 +1,27 @@
 # Contributing to ModelChain
 
-We love contributions! Here's how to get started.
+👋 **Welcome to ModelChain!**
+
+We're building SBOM generators for AI models with provenance tracking, integrity verification, and compliance reporting — and we'd love your help. Whether you're squashing bugs, adding a new SBOM exporter, or improving documentation, your contributions help make AI supply chains more transparent and trustworthy.
+
+## First Time Contributor?
+
+Not sure where to start? Here are some ideas:
+
+- Look for issues tagged `good first issue`
+- Improve test coverage or add edge case tests
+- Add a new compliance check for AI regulations
+- Improve documentation or add examples
+
+We value every contribution, no matter how small. We're here to support you!
+
+## Need Help?
+
+Have a question or need guidance?
+
+- Open a [GitHub Issue](https://github.com/Carlos-Projects/modelchain/issues)
+- Check existing issues first
+- Include details: Python version, OS, what you're trying to do
 
 ## Development Setup
 
@@ -50,3 +71,7 @@ Follow conventional commits: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `ch
 ## Release Process
 
 See `RELEASE.md` for the release checklist.
+
+---
+
+💡 This project is governed by a [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agree to uphold its principles.
