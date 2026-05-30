@@ -4,6 +4,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/Carlos-Projects/modelchain/actions/workflows/ci.yml/badge.svg)](https://github.com/Carlos-Projects/modelchain/actions/workflows/ci.yml)
+[![Star History](https://img.shields.io/badge/Star-History-blue?style=social)](https://api.star-history.com/svg?repos=Carlos-Projects/modelchain&type=Date)
 
 **Software Bill of Materials (SBOM) generator for AI models** with provenance tracking, cryptographic integrity verification, and compliance reporting.
 
